@@ -1,0 +1,297 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Project Repository and Development Environment",
+        "description": "Initialize the project repository and set up the development environment with Next.js 14+, TypeScript, and necessary dependencies.",
+        "details": "1. Create a new GitHub repository\n2. Initialize Next.js 14+ project with TypeScript:\n   ```bash\n   npx create-next-app@latest --typescript\n   ```\n3. Set up ESLint and Prettier for code quality\n4. Install and configure Tailwind CSS:\n   ```bash\n   npm install -D tailwindcss postcss autoprefixer\n   npx tailwindcss init -p\n   ```\n5. Install additional dependencies:\n   ```bash\n   npm install framer-motion @headlessui/react @radix-ui/react-* zustand @tanstack/react-query lucide-react\n   ```\n6. Set up folder structure (pages, components, styles, utils, hooks)\n7. Create basic Next.js app structure with App Router\n8. Set up environment variables (.env.local)\n9. Initialize Git and make initial commit",
+        "testStrategy": "1. Verify that the project builds without errors\n2. Ensure all dependencies are correctly installed\n3. Check that ESLint and Prettier are working as expected\n4. Confirm that Tailwind CSS is properly configured\n5. Test basic Next.js routing with App Router",
+        "priority": "high",
+        "dependencies": [],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Git repository and create Next.js project",
+            "description": "Set up the initial project structure using Next.js with TypeScript support",
+            "dependencies": [],
+            "details": "1. Create a new directory for the project\n2. Initialize a Git repository\n3. Use create-next-app to set up a new Next.js project with TypeScript\n4. Review and update package.json dependencies",
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Configure ESLint and Prettier",
+            "description": "Set up and configure ESLint and Prettier for code quality and formatting",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Install ESLint and Prettier dependencies\n2. Create ESLint configuration file\n3. Create Prettier configuration file\n4. Add lint and format scripts to package.json\n5. Set up VS Code settings for ESLint and Prettier integration",
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Set up Jest and React Testing Library",
+            "description": "Configure Jest and React Testing Library for unit and integration testing",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Install Jest, React Testing Library, and related dependencies\n2. Create Jest configuration file\n3. Set up test scripts in package.json\n4. Create a sample test file to verify the setup",
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Organize project structure",
+            "description": "Create a well-organized folder structure for the project",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create folders for components, pages, styles, utils, and tests\n2. Set up a basic layout component\n3. Create placeholder files for main pages\n4. Set up global styles and theme configuration",
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Set up CI/CD pipeline",
+            "description": "Configure a basic CI/CD pipeline using GitHub Actions",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "1. Create a .github/workflows directory\n2. Create a YAML file for the CI/CD workflow\n3. Configure steps for linting, testing, and building the project\n4. Set up deployment to a staging environment (e.g., Vercel or Netlify)\n5. Test the CI/CD pipeline by pushing changes to the repository",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Implement Notion API Integration and Authentication",
+        "description": "Set up Notion API integration, including OAuth authentication flow and basic data fetching.",
+        "details": "1. Register the application with Notion to obtain API credentials\n2. Implement OAuth 2.0 flow using NextAuth.js:\n   ```bash\n   npm install next-auth @auth/notion-provider\n   ```\n3. Set up NextAuth.js configuration in `pages/api/auth/[...nextauth].ts`\n4. Create Notion API utility functions in `utils/notion.ts`:\n   - `getNotionClient(token: string): Client`\n   - `fetchDatabases(client: Client): Promise<Database[]>`\n   - `fetchDatabaseItems(client: Client, databaseId: string): Promise<Page[]>`\n5. Implement token refresh mechanism\n6. Set up secure storage for Notion access tokens (use NextAuth.js built-in session management)\n7. Create API routes for Notion operations:\n   - `pages/api/notion/databases.ts`\n   - `pages/api/notion/items.ts`\n8. Implement error handling and rate limiting for Notion API calls",
+        "testStrategy": "1. Test OAuth flow with Notion\n2. Verify secure storage of access tokens\n3. Test API routes with mock data\n4. Ensure proper error handling for API failures\n5. Verify rate limiting functionality\n6. Test token refresh mechanism",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement OAuth Flow",
+            "description": "Set up the OAuth 2.0 authorization flow for secure user authentication",
+            "dependencies": [],
+            "details": "1. Register the application with the OAuth provider\n2. Implement the authorization request\n3. Handle the callback and token exchange\n4. Store the access token securely\n5. Implement token refresh mechanism",
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Create API Utility Functions",
+            "description": "Develop reusable utility functions for making API requests",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create a base API client\n2. Implement functions for GET, POST, PUT, DELETE requests\n3. Add request interceptors for adding authentication headers\n4. Implement response handling and parsing",
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Set Up Secure Token Storage",
+            "description": "Implement a secure mechanism to store and manage access tokens",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Choose a secure storage method (e.g., encrypted local storage, secure cookie)\n2. Implement functions to save, retrieve, and delete tokens\n3. Ensure tokens are encrypted at rest\n4. Implement token expiration handling",
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Implement API Rate Limiting",
+            "description": "Add rate limiting mechanism to prevent exceeding API usage limits",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Implement a request queue\n2. Add delay between requests\n3. Track API usage and adjust request rate dynamically\n4. Implement backoff strategy for rate limit errors",
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Handle API Error Scenarios",
+            "description": "Implement comprehensive error handling for API requests",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "1. Define error types and codes\n2. Implement error catching and logging\n3. Create user-friendly error messages\n4. Implement retry logic for transient errors\n5. Handle authentication errors and token refresh",
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Test and Document API Integration",
+            "description": "Thoroughly test the API integration and create documentation",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "1. Write unit tests for utility functions\n2. Perform integration tests for the entire flow\n3. Document the API integration process\n4. Create usage examples and guidelines\n5. Perform security audit of the implementation",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Design and Implement Core UI Components",
+        "description": "Create reusable UI components following the Motion-inspired design system.",
+        "details": "1. Set up a design system using Tailwind CSS:\n   - Define color palette in `tailwind.config.js`\n   - Create typography classes\n   - Define spacing and sizing scales\n2. Implement core UI components:\n   - ActivityCard: `components/ActivityCard.tsx`\n   - Timeline: `components/Timeline.tsx`\n   - QuickActionButton: `components/QuickActionButton.tsx`\n   - StatusIndicator: `components/StatusIndicator.tsx`\n   - Sidebar: `components/Sidebar.tsx`\n3. Use Framer Motion for animations:\n   ```typescript\n   import { motion } from 'framer-motion';\n   \n   const ActivityCard = motion(({ activity }) => (\n     // Component implementation\n   ));\n   ```\n4. Implement responsive design using Tailwind CSS classes\n5. Create a theme provider for easy theme switching\n6. Implement accessibility features (ARIA attributes, keyboard navigation)",
+        "testStrategy": "1. Create a Storybook instance for component testing\n2. Implement unit tests for each component\n3. Perform cross-browser testing\n4. Conduct accessibility audit (use tools like axe-core)\n5. Test responsiveness across different screen sizes",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Develop Database Schema and ORM Integration",
+        "description": "Design and implement the database schema using PostgreSQL and Prisma ORM.",
+        "details": "1. Set up PostgreSQL database\n2. Install Prisma ORM:\n   ```bash\n   npm install prisma @prisma/client\n   npx prisma init\n   ```\n3. Define Prisma schema in `prisma/schema.prisma`:\n   ```prisma\n   model User {\n     id              String   @id @default(uuid())\n     email           String   @unique\n     name            String?\n     notionAccessToken String?\n     selectedDatabases String[]\n     preferences     Json?\n     createdAt       DateTime @default(now())\n     lastSync        DateTime?\n     activities      Activity[]\n   }\n\n   model Activity {\n     id               String   @id @default(uuid())\n     notionId         String?\n     title            String\n     description      String?\n     status           String\n     priority         String\n     estimatedDuration Int?\n     actualDuration   Int?\n     scheduledStart   DateTime?\n     scheduledEnd     DateTime?\n     tags             String[]\n     category         String?\n     createdAt        DateTime @default(now())\n     updatedAt        DateTime @updatedAt\n     completedAt      DateTime?\n     notionProperties Json?\n     userId           String\n     user             User     @relation(fields: [userId], references: [id])\n   }\n   ```\n4. Generate Prisma client:\n   ```bash\n   npx prisma generate\n   ```\n5. Create database migration:\n   ```bash\n   npx prisma migrate dev --name init\n   ```\n6. Implement data access layer in `utils/db.ts`\n7. Set up connection pooling for better performance",
+        "testStrategy": "1. Write unit tests for database operations\n2. Test data integrity and constraints\n3. Perform load testing to ensure database performance\n4. Verify proper indexing for frequent queries\n5. Test database migration scripts",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement Activity CRUD Operations",
+        "description": "Develop API routes and frontend functionality for Creating, Reading, Updating, and Deleting activities.",
+        "details": "1. Create API routes for CRUD operations:\n   - `pages/api/activities/index.ts` (GET, POST)\n   - `pages/api/activities/[id].ts` (GET, PUT, DELETE)\n2. Implement controller functions in `utils/activities.ts`:\n   - `createActivity(data: ActivityInput): Promise<Activity>`\n   - `getActivities(userId: string): Promise<Activity[]>`\n   - `updateActivity(id: string, data: Partial<ActivityInput>): Promise<Activity>`\n   - `deleteActivity(id: string): Promise<void>`\n3. Use React Query for state management and API calls:\n   ```typescript\n   import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';\n\n   const useActivities = () => useQuery(['activities'], getActivities);\n   const useCreateActivity = () => {\n     const queryClient = useQueryClient();\n     return useMutation(createActivity, {\n       onSuccess: () => queryClient.invalidateQueries(['activities'])\n     });\n   };\n   ```\n4. Implement form components for activity creation and editing\n5. Add validation using a library like Zod:\n   ```bash\n   npm install zod\n   ```\n6. Implement optimistic updates for better UX\n7. Add error handling and loading states",
+        "testStrategy": "1. Write unit tests for API routes and controller functions\n2. Implement integration tests for the full CRUD cycle\n3. Test form validation\n4. Verify optimistic updates and error handling\n5. Perform usability testing for the activity management interface",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Develop Smart Scheduling Algorithm",
+        "description": "Implement an AI-powered scheduling algorithm for automatic task organization and time estimation.",
+        "details": "1. Research and choose an appropriate machine learning library (e.g., TensorFlow.js)\n2. Implement time estimation model:\n   - Collect historical data on task durations\n   - Train a model to predict task duration based on title, description, and tags\n3. Develop scheduling algorithm:\n   - Consider user preferences (working hours, buffer time)\n   - Account for task priorities and deadlines\n   - Implement conflict resolution logic\n4. Create API route for scheduling suggestions: `pages/api/schedule/suggest.ts`\n5. Implement frontend components for displaying and adjusting suggestions\n6. Add real-time updates using WebSockets or Server-Sent Events\n7. Optimize algorithm performance and implement caching strategies",
+        "testStrategy": "1. Develop unit tests for individual algorithm components\n2. Create a test suite with various scheduling scenarios\n3. Measure and optimize algorithm performance\n4. Conduct user testing to gather feedback on scheduling suggestions\n5. Implement A/B testing to compare different scheduling strategies",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Drag-and-Drop Functionality",
+        "description": "Add drag-and-drop capabilities for easy task reorganization in the daily planning interface.",
+        "details": "1. Choose a drag-and-drop library (e.g., react-beautiful-dnd or @dnd-kit/core)\n2. Install the chosen library:\n   ```bash\n   npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities\n   ```\n3. Implement draggable activity cards:\n   ```typescript\n   import { useSortable } from '@dnd-kit/sortable';\n   import { CSS } from '@dnd-kit/utilities';\n\n   const DraggableActivityCard = ({ activity }) => {\n     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: activity.id });\n     const style = {\n       transform: CSS.Transform.toString(transform),\n       transition,\n     };\n     return (\n       <div ref={setNodeRef} style={style} {...attributes} {...listeners}>\n         <ActivityCard activity={activity} />\n       </div>\n     );\n   };\n   ```\n4. Create a droppable timeline component\n5. Implement logic to update activity order and time slots on drop\n6. Add visual feedback for drag operations (e.g., placeholder, drop target highlighting)\n7. Ensure smooth animations using Framer Motion\n8. Implement touch support for mobile devices",
+        "testStrategy": "1. Write unit tests for drag-and-drop components\n2. Perform integration tests for the entire drag-and-drop flow\n3. Test edge cases (e.g., dragging outside valid areas)\n4. Conduct cross-browser and cross-device testing\n5. Verify accessibility compliance for drag-and-drop operations",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Develop Activity Analytics and Insights",
+        "description": "Implement analytics features to track completion rates, time spent, and provide productivity insights.",
+        "details": "1. Design analytics data model and update Prisma schema\n2. Implement data collection mechanisms:\n   - Track activity status changes\n   - Record actual time spent on activities\n3. Create API routes for analytics data:\n   - `pages/api/analytics/completion-rate.ts`\n   - `pages/api/analytics/time-spent.ts`\n   - `pages/api/analytics/productivity-insights.ts`\n4. Develop data processing and aggregation functions\n5. Choose and integrate a charting library (e.g., Chart.js or D3.js):\n   ```bash\n   npm install chart.js react-chartjs-2\n   ```\n6. Create reusable chart components:\n   - CompletionRateChart\n   - TimeSpentChart\n   - ProductivityInsightChart\n7. Implement analytics dashboard page\n8. Add date range selection for flexible reporting\n9. Implement data export functionality (CSV, PDF)",
+        "testStrategy": "1. Write unit tests for data processing and aggregation functions\n2. Test API routes for correct data retrieval\n3. Implement integration tests for the analytics dashboard\n4. Verify chart rendering and interactivity\n5. Test data export functionality\n6. Perform usability testing on the analytics interface",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Real-time Synchronization with Notion",
+        "description": "Develop a real-time synchronization system to keep the local database in sync with Notion.",
+        "details": "1. Implement webhook endpoint for Notion updates: `pages/api/webhooks/notion.ts`\n2. Set up background job for periodic synchronization (e.g., using Bull MQ):\n   ```bash\n   npm install bull ioredis\n   ```\n3. Implement synchronization logic:\n   - Fetch changes from Notion API\n   - Compare with local database\n   - Apply updates to local database\n   - Handle conflicts and merges\n4. Add real-time updates to frontend using WebSockets:\n   ```bash\n   npm install socket.io socket.io-client\n   ```\n5. Implement retry mechanism for failed synchronizations\n6. Add logging and monitoring for sync processes\n7. Optimize synchronization to minimize API calls and database operations",
+        "testStrategy": "1. Develop unit tests for synchronization logic\n2. Implement integration tests simulating Notion updates\n3. Test conflict resolution scenarios\n4. Verify real-time updates on the frontend\n5. Perform load testing to ensure scalability of the sync process\n6. Monitor and optimize synchronization performance",
+        "priority": "high",
+        "dependencies": [
+          2,
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Calendar Integration",
+        "description": "Develop two-way synchronization with external calendars (Google Calendar, Outlook) for comprehensive scheduling.",
+        "details": "1. Set up OAuth 2.0 for Google Calendar and Microsoft Graph API\n2. Implement calendar API clients:\n   - `utils/googleCalendar.ts`\n   - `utils/outlookCalendar.ts`\n3. Create API routes for calendar operations:\n   - `pages/api/calendar/google/[...operations].ts`\n   - `pages/api/calendar/outlook/[...operations].ts`\n4. Implement two-way sync logic:\n   - Fetch events from external calendars\n   - Create/update/delete events in external calendars\n   - Handle conflicts and overlaps\n5. Add UI components for calendar integration settings\n6. Implement background jobs for periodic calendar sync\n7. Add availability management based on calendar events\n8. Ensure proper handling of recurring events and exceptions",
+        "testStrategy": "1. Write unit tests for calendar API clients\n2. Implement integration tests for two-way sync\n3. Test conflict resolution and availability management\n4. Verify handling of various event types (single, recurring, all-day)\n5. Perform end-to-end testing of calendar integration flow\n6. Conduct user acceptance testing for calendar features",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Develop Collaboration Features",
+        "description": "Implement shared activity views, team planning capabilities, and progress sharing functionality.",
+        "details": "1. Update data model to support team and sharing concepts\n2. Implement API routes for collaboration:\n   - `pages/api/teams/[...operations].ts`\n   - `pages/api/sharing/[...operations].ts`\n3. Develop team management UI components\n4. Implement shared activity views:\n   - Create read-only and editable shared views\n   - Implement real-time updates for shared views\n5. Add team planning features:\n   - Group scheduling and task assignment\n   - Team-wide analytics and insights\n6. Implement progress sharing functionality:\n   - Generate shareable progress reports\n   - Create public view links for specific activities or timelines\n7. Add notification system for team activities:\n   ```bash\n   npm install @novu/node @novu/notification-center\n   ```\n8. Ensure proper access control and permissions management",
+        "testStrategy": "1. Develop unit tests for team and sharing logic\n2. Implement integration tests for collaboration features\n3. Test real-time updates in shared views\n4. Verify access control and permissions\n5. Conduct usability testing for team planning interface\n6. Perform security audit of sharing and collaboration features",
+        "priority": "low",
+        "dependencies": [
+          5,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Optimize Performance and Implement Progressive Web App",
+        "description": "Enhance application performance, implement PWA features, and ensure mobile responsiveness.",
+        "details": "1. Perform code splitting and lazy loading:\n   ```typescript\n   import dynamic from 'next/dynamic';\n   const DynamicComponent = dynamic(() => import('../components/HeavyComponent'));\n   ```\n2. Implement server-side rendering (SSR) and static site generation (SSG) where appropriate\n3. Optimize images and assets:\n   - Use Next.js Image component\n   - Implement responsive images\n4. Set up service worker for offline capabilities:\n   ```bash\n   npm install next-pwa\n   ```\n5. Implement app manifest for PWA:\n   - Create `public/manifest.json`\n   - Add necessary icons and splash screens\n6. Enhance mobile responsiveness:\n   - Refine responsive designs\n   - Implement touch-friendly interactions\n7. Set up performance monitoring (e.g., using Lighthouse CI)\n8. Implement push notifications for important updates\n9. Optimize API calls and implement efficient caching strategies\n10. Conduct thorough cross-browser and cross-device testing",
+        "testStrategy": "1. Run Lighthouse audits and address performance issues\n2. Implement automated performance testing in CI/CD pipeline\n3. Test offline functionality and PWA features\n4. Conduct usability testing on various mobile devices\n5. Perform load testing to ensure scalability\n6. Verify push notification functionality\n7. Test application behavior under poor network conditions",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          5,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-06-15T22:54:53.388Z",
+      "updated": "2025-06-15T22:57:35.783Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

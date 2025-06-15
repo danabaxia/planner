@@ -1,0 +1,109 @@
+{
+	"meta": {
+		"generatedAt": "2025-06-15T22:55:38.698Z",
+		"tasksAnalyzed": 12,
+		"totalTasks": 12,
+		"analysisCount": 12,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": true
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Setup Project Repository and Development Environment",
+			"complexityScore": 4,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down the setup process into detailed steps for initializing the repository, configuring Next.js with TypeScript, setting up code quality tools, and organizing the project structure.",
+			"reasoning": "This task involves standard setup procedures but requires attention to detail in configuring multiple tools and dependencies."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Implement Notion API Integration and Authentication",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail the steps for implementing OAuth flow, creating API utility functions, setting up secure token storage, and handling API rate limiting and error scenarios.",
+			"reasoning": "This task involves complex authentication flows, API integration, and security considerations, requiring careful implementation and error handling."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Design and Implement Core UI Components",
+			"complexityScore": 6,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Break down the process of creating each core UI component, including design system setup, animation implementation, and accessibility features.",
+			"reasoning": "Creating a cohesive set of UI components with animations and accessibility features requires significant design and development effort."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Develop Database Schema and ORM Integration",
+			"complexityScore": 5,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Outline the steps for setting up PostgreSQL, defining the Prisma schema, creating migrations, and implementing the data access layer.",
+			"reasoning": "While database setup is straightforward, designing an efficient schema and integrating ORM requires careful planning and implementation."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Implement Activity CRUD Operations",
+			"complexityScore": 6,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail the implementation of API routes, controller functions, frontend state management, and form components for activity management.",
+			"reasoning": "This task involves both backend and frontend work, including state management and form handling, which adds to its complexity."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Develop Smart Scheduling Algorithm",
+			"complexityScore": 9,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Break down the process of researching, implementing, and optimizing the AI-powered scheduling algorithm, including data collection, model training, and integration with the application.",
+			"reasoning": "Developing an AI-powered scheduling algorithm is highly complex, involving machine learning, optimization techniques, and integration challenges."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Implement Drag-and-Drop Functionality",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail the steps for implementing draggable components, handling drop events, updating activity order, and ensuring smooth animations and touch support.",
+			"reasoning": "Drag-and-drop functionality requires careful implementation to ensure smooth user experience across devices and handle complex interaction scenarios."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Develop Activity Analytics and Insights",
+			"complexityScore": 8,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Outline the process of designing the analytics data model, implementing data collection and processing, creating visualizations, and developing the analytics dashboard.",
+			"reasoning": "This task involves complex data processing, visualization, and UI development, requiring significant effort in both backend and frontend implementation."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Implement Real-time Synchronization with Notion",
+			"complexityScore": 9,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Break down the implementation of webhook handling, background synchronization jobs, conflict resolution, and real-time frontend updates.",
+			"reasoning": "Real-time synchronization with external services is highly complex, involving concurrent operations, conflict resolution, and ensuring data consistency across systems."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Implement Calendar Integration",
+			"complexityScore": 8,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Detail the steps for implementing OAuth for calendar services, developing calendar API clients, handling two-way sync, and managing availability based on calendar events.",
+			"reasoning": "Calendar integration involves complex authentication flows, handling various event types, and ensuring consistent two-way synchronization across multiple services."
+		},
+		{
+			"taskId": 11,
+			"taskTitle": "Develop Collaboration Features",
+			"complexityScore": 8,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Outline the implementation of team management, shared views, real-time updates, and access control for collaboration features.",
+			"reasoning": "Implementing collaboration features requires significant changes to the data model, real-time functionality, and careful handling of permissions and access control."
+		},
+		{
+			"taskId": 12,
+			"taskTitle": "Optimize Performance and Implement Progressive Web App",
+			"complexityScore": 7,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Break down the process of implementing code splitting, SSR/SSG optimizations, service worker setup, PWA features, and performance monitoring.",
+			"reasoning": "Performance optimization and PWA implementation involve various techniques and considerations across the entire application stack, requiring careful planning and execution."
+		}
+	]
+}
