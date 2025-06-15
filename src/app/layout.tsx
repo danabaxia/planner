@@ -6,7 +6,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Daily Activity Planner',
-  description: 'A beautiful Notion-powered daily activity planner with Motion-inspired design',
+  description:
+    'A beautiful Notion-powered daily activity planner with Motion-inspired design',
 }
 
 export default function RootLayout({
@@ -23,4 +24,4 @@ export default function RootLayout({
       </body>
     </html>
   )
-} 
+}

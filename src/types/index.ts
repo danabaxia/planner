@@ -78,4 +78,4 @@ export interface TimelineEvent {
   end: Date
   type: 'activity' | 'meeting' | 'break'
   color?: string
-} 
+}

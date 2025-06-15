@@ -34,7 +34,10 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-6 rounded-xl border border-border bg-card card-hover animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <div
+            className="p-6 rounded-xl border border-border bg-card card-hover animate-slide-up"
+            style={{ animationDelay: '0.1s' }}
+          >
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
               <CheckCircle className="w-6 h-6 text-primary" />
             </div>
@@ -44,22 +47,30 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-6 rounded-xl border border-border bg-card card-hover animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <div
+            className="p-6 rounded-xl border border-border bg-card card-hover animate-slide-up"
+            style={{ animationDelay: '0.2s' }}
+          >
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
               <Clock className="w-6 h-6 text-primary" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Time Tracking</h3>
             <p className="text-muted-foreground">
-              Track time spent on activities and get insights into your productivity.
+              Track time spent on activities and get insights into your
+              productivity.
             </p>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-muted/50 rounded-xl p-8 text-center animate-slide-up" style={{ animationDelay: '0.3s' }}>
+        <div
+          className="bg-muted/50 rounded-xl p-8 text-center animate-slide-up"
+          style={{ animationDelay: '0.3s' }}
+        >
           <h2 className="text-2xl font-semibold mb-4">Ready to get started?</h2>
           <p className="text-muted-foreground mb-6">
-            Connect your Notion workspace and start planning your day with beautiful, intuitive tools.
+            Connect your Notion workspace and start planning your day with
+            beautiful, intuitive tools.
           </p>
           <button className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2">
             <Plus className="w-5 h-5" />
@@ -69,4 +80,4 @@ export default function Home() {
       </div>
     </main>
   )
-} 
+}
