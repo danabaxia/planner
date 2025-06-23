@@ -1,15 +1,14 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { SessionProvider } from '@/components/providers/SessionProvider'
-import { Container } from '@/components/ui'
+import { Providers } from './providers'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Daily Activity Planner',
-  description:
-    'A beautiful Notion-powered daily activity planner with Motion-inspired design',
+  title: 'Planner App',
+  description: 'A modern task planning application with Notion integration',
 }
 
 export default function RootLayout({
@@ -20,15 +19,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider>
-          <Container 
-            size="full" 
-            className="min-h-screen bg-background text-foreground"
-            as="div"
-          >
-            {children}
-          </Container>
-        </SessionProvider>
+        <Providers>{children}</Providers>
+        <Toaster position="top-right" />
       </body>
     </html>
   )

@@ -43,16 +43,30 @@ model Session {
 }
 
 model User {
-  id                 String    @id @default(cuid())
-  name               String?
-  email              String?   @unique
-  emailVerified      DateTime?
-  image              String?
-  notionWorkspaceId  String?   // Notion-specific field
-  accounts           Account[]
-  sessions           Session[]
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  id                      String    @id @default(cuid())
+  name                    String?
+  email                   String?   @unique
+  emailVerified          DateTime?
+  image                   String?
+  notionAccessToken      String?   @db.Text
+  notionWorkspaceId      String?
+  notionBotId            String?
+  selectedNotionDatabases String[]  @default([])
+  pushSubscription       Json?
+  accounts               Account[]
+  sessions               Session[]
+  tasks                  Task[]
+  reminders              Reminder[]
+  notionSyncs           NotionSync[]
+  lastSyncedAt          DateTime?
+  projects               Project[]
+  comments               Comment[]
+  attachments            Attachment[]
+  schemaMappings         NotionSchemaMapping[]
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([email])
 }
 
 model VerificationToken {
@@ -61,4 +75,139 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Planner Models
+model Project {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      String    @default("active") // active, archived, deleted
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+  notionId    String?   // Notion-specific field for sync
+  notionUrl   String?   // Notion page URL
+
+  @@index([userId])
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      String
+  priority    String
+  dueDate     DateTime?
+  category    String?
+  tags        String[]
+  assignee    String?
+  duration    Int?
+  notionId    String?
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  comments    Comment[]
+  attachments Attachment[]
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reminders   Reminder[]
+
+  @@index([userId])
+  @@index([notionId])
+  @@index([projectId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notionId  String?  // Notion-specific field for sync
+
+  @@index([taskId])
+  @@index([userId])
+}
+
+model Attachment {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  type      String   // file, link
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notionId  String?  // Notion-specific field for sync
+
+  @@index([taskId])
+  @@index([userId])
+}
+
+model NotionSchemaMapping {
+  id              String   @id @default(cuid())
+  userId          String
+  databaseId      String
+  properties      Json
+  defaultMappings Json
+  customMappings  Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, databaseId])
+  @@index([userId])
+  @@index([databaseId])
+}
+
+model NotionSync {
+  id           String    @id @default(cuid())
+  userId       String
+  databaseId   String
+  status       String    @default("pending") // pending, syncing, completed, failed
+  error        String?
+  lastSyncedAt DateTime?
+  syncInterval Int?      // Interval in minutes
+  nextSyncAt   DateTime? // Next scheduled sync time
+  enabled      Boolean   @default(false)
+  lastSyncResult Json?   // Detailed results of last sync
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, databaseId])
+  @@index([userId])
+  @@index([databaseId])
+  @@index([status])
+  @@index([enabled])
+}
+
+model Reminder {
+  id           String   @id @default(cuid())
+  taskId       String
+  userId       String
+  reminderTime DateTime
+  reminderType String   // "push", "email", etc.
+  message      String?
+  isRead       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  task         Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([userId])
+  @@index([reminderTime])
+  @@index([isRead])
 }

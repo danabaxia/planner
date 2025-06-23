@@ -19,7 +19,7 @@ alwaysApply: true
 
 - **File References:**
   - Use `[filename](mdc:path/to/file)` ([filename](mdc:filename)) to reference files
-  - Example: [prisma.md](mdc:.roo/rules/prisma.md) for rule references
+  - Example: [prisma.md](.roo/rules/prisma.md) for rule references
   - Example: [schema.prisma](mdc:prisma/schema.prisma) for code references
 
 - **Code Examples:**
@@ -51,14 +51,3 @@ alwaysApply: true
   - Include both DO and DON'T examples
   - Reference actual code over theoretical examples
   - Use consistent formatting across rules 
-
-- **Error Handling Rule"**
-  - Do not use the native `Error` class.
-  - Always throw or return an instance of `EnhancedApiError` instead.
-  - When catching or creating errors, use the following pattern:
- ```ts
-  throw new EnhancedApiError('Message', {
-    code: 'API_TIMEOUT',
-    retryable: true,
-    cause: originalError,
-  });

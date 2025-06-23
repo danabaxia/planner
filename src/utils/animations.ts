@@ -2,8 +2,16 @@ import { Variants, Transition } from 'framer-motion';
 
 // Base animation variants
 export const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.2,
+      ease: 'easeOut',
+    },
+  },
 };
 
 export const fadeOut: Variants = {
@@ -32,8 +40,18 @@ export const slideRight: Variants = {
 };
 
 export const scaleIn: Variants = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: { scale: 1, opacity: 1 },
+  hidden: {
+    opacity: 0,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.2,
+      ease: 'easeOut',
+    },
+  },
 };
 
 export const scaleOut: Variants = {
@@ -212,16 +230,30 @@ export const sidebarNavItem: Variants = {
 
 // Modal and overlay animations
 export const modalOverlay: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-  exit: { opacity: 0 },
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.2,
+      ease: 'easeOut',
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.2,
+      ease: 'easeIn',
+    },
+  },
 };
 
 export const modalContent: Variants = {
   hidden: {
     opacity: 0,
-    scale: 0.9,
-    y: 20,
+    scale: 0.95,
+    y: -20,
   },
   visible: {
     opacity: 1,
@@ -230,15 +262,16 @@ export const modalContent: Variants = {
     transition: {
       type: 'spring',
       stiffness: 300,
-      damping: 25,
+      damping: 20,
     },
   },
   exit: {
     opacity: 0,
-    scale: 0.9,
+    scale: 0.95,
     y: 20,
     transition: {
       duration: 0.2,
+      ease: 'easeIn',
     },
   },
 };
@@ -361,20 +394,16 @@ export const notificationSlide: Variants = {
 
 // Form field animations
 export const formField: Variants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: {
+    opacity: 0,
+    y: -10,
+  },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      type: 'spring',
-      stiffness: 200,
-      damping: 20,
-    },
-  },
-  error: {
-    x: [-5, 5, -5, 5, 0],
-    transition: {
-      duration: 0.4,
+      duration: 0.2,
+      ease: 'easeOut',
     },
   },
 };
@@ -605,6 +634,110 @@ export const shimmer: Variants = {
       duration: 2,
       ease: 'linear',
       repeat: Infinity,
+    },
+  },
+};
+
+export const slideIn: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -20,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.2,
+      ease: 'easeOut',
+    },
+  },
+};
+
+export const springIn: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.9,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 300,
+      damping: 20,
+    },
+  },
+};
+
+export const listItem: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -20,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+  },
+};
+
+export const list: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+export const drawerContent: Variants = {
+  hidden: {
+    opacity: 0,
+    x: '100%',
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 300,
+      damping: 30,
+    },
+  },
+  exit: {
+    opacity: 0,
+    x: '100%',
+    transition: {
+      duration: 0.2,
+      ease: 'easeIn',
+    },
+  },
+};
+
+export const tooltipContent: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.95,
+    y: 5,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 0.15,
+      ease: 'easeOut',
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    y: 5,
+    transition: {
+      duration: 0.1,
+      ease: 'easeIn',
     },
   },
 }; 

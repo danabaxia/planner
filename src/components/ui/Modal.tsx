@@ -3,9 +3,15 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/utils/cn';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { createReducedMotionVariants } from '@/animations/reducedMotion';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { useAnnouncer } from '@/hooks/useAnnouncer';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { useFocusVisible } from '@/hooks/useFocusVisible';
 
-export type ModalSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
-export type ModalVariant = 'default' | 'centered' | 'drawer' | 'fullscreen';
+export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'screen-sm' | 'screen-md' | 'full';
+export type ModalVariant = 'default' | 'fade' | 'scale' | 'slide';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -87,219 +93,180 @@ export const Modal: React.FC<ModalProps> = ({
   'aria-describedby': ariaDescribedBy,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const previousActiveElement = useRef<HTMLElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const { containerRef, focusFirstElement } = useFocusTrap<HTMLDivElement>({
+    isActive: isOpen,
+    autoFocus: true,
+    restoreFocus: true,
+  });
+  const { announce } = useAnnouncer();
+  const { focusVisible, getFocusRingClass } = useFocusVisible();
 
-  // Handle escape key
-  useEffect(() => {
-    if (!closeOnEscape) return;
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+  // Handle keyboard shortcuts
+  useKeyboardShortcut(
+    (event: KeyboardEvent) => {
+      onClose();
+    },
+    {
+      key: 'Escape',
+      enabled: isOpen,
+      description: 'Close modal',
+      preventDefault: true,
+      stopPropagation: true,
     }
+  );
 
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, closeOnEscape, onClose]);
-
-  // Handle focus management
+  // Announce modal state changes to screen readers
   useEffect(() => {
     if (isOpen) {
-      previousActiveElement.current = document.activeElement as HTMLElement;
-      
-      // Focus the modal after a brief delay to ensure it's rendered
-      const timer = setTimeout(() => {
-        if (modalRef.current) {
-          const focusableElement = modalRef.current.querySelector(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-          ) as HTMLElement;
-          
-          if (focusableElement) {
-            focusableElement.focus();
-          } else {
-            modalRef.current.focus();
-          }
-        }
-      }, 100);
-
-      return () => clearTimeout(timer);
+      announce(`${title} dialog opened. ${description || ''}`);
+      focusFirstElement();
     } else {
-      // Restore focus when modal closes
-      if (previousActiveElement.current) {
-        previousActiveElement.current.focus();
-      }
+      announce('Dialog closed');
     }
+  }, [isOpen, title, description, announce, focusFirstElement]);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
-  // Handle body scroll
-  useEffect(() => {
-    if (!preventScroll) return;
-
-    if (isOpen) {
-      const originalStyle = window.getComputedStyle(document.body).overflow;
-      document.body.style.overflow = 'hidden';
-      
-      return () => {
-        document.body.style.overflow = originalStyle;
-      };
-    }
-  }, [isOpen, preventScroll]);
-
-  // Handle backdrop click
+  // Handle click outside
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (closeOnBackdropClick && event.target === event.currentTarget) {
       onClose();
     }
   };
 
-  // Handle focus trap
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Tab') {
-      const focusableElements = modalRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      
-      if (focusableElements && focusableElements.length > 0) {
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-        
-        if (event.shiftKey) {
-          if (document.activeElement === firstElement) {
-            event.preventDefault();
-            lastElement.focus();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            event.preventDefault();
-            firstElement.focus();
-          }
-        }
-      }
-    }
-  };
-
   const getModalClasses = () => {
-    return cn(
-      'relative bg-white rounded-lg shadow-xl',
-      {
-        'w-full': variant === 'fullscreen',
-        'rounded-none': variant === 'drawer' || variant === 'fullscreen',
-      },
-      variant !== 'fullscreen' && sizeClasses[size],
-      variantClasses[variant],
-      className
-    );
+    const baseClasses = 'bg-white rounded-lg shadow-xl relative';
+    const sizeClasses = {
+      sm: 'max-w-sm w-full',
+      md: 'max-w-md w-full',
+      lg: 'max-w-lg w-full',
+      xl: 'max-w-xl w-full',
+      '2xl': 'max-w-2xl w-full',
+      'screen-sm': 'max-w-screen-sm w-full',
+      'screen-md': 'max-w-screen-md w-full',
+      full: 'w-screen h-screen',
+    }[size];
+
+    return cn(baseClasses, sizeClasses, className);
   };
 
   const getContainerClasses = () => {
     return cn(
-      'flex',
-      {
-        'items-center justify-center min-h-screen': variant === 'centered',
-        'items-start justify-center min-h-screen': variant === 'default',
-        'items-stretch justify-end min-h-screen': variant === 'drawer',
-        'items-stretch justify-center min-h-screen': variant === 'fullscreen',
-      }
+      'fixed inset-0 z-50 flex items-center justify-center p-4',
+      backdropClassName
     );
   };
 
+  // Define animation variants
+  const backdropVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
+
+  const modalVariants = {
+    default: {
+      hidden: { opacity: 0, y: 20, scale: 0.95 },
+      visible: { opacity: 1, y: 0, scale: 1 },
+      exit: { opacity: 0, y: 20, scale: 0.95 },
+    },
+    fade: {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+      exit: { opacity: 0 },
+    },
+    scale: {
+      hidden: { opacity: 0, scale: 0.95 },
+      visible: { opacity: 1, scale: 1 },
+      exit: { opacity: 0, scale: 0.95 },
+    },
+    slide: {
+      hidden: { opacity: 0, y: 50 },
+      visible: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: 50 },
+    },
+  };
+
+  // Create reduced motion variants
+  const reducedBackdropVariants = createReducedMotionVariants({
+    variants: backdropVariants,
+    transition: { duration: 0.1 },
+  });
+
+  const reducedModalVariants = createReducedMotionVariants({
+    variants: modalVariants[variant],
+    transition: { duration: 0.1 },
+  });
+
+  if (!isOpen) return null;
+
+  const transitionClasses = prefersReducedMotion
+    ? 'opacity-0 opacity-100'
+    : 'opacity-0 transform scale-95 duration-200 ease-out opacity-100 scale-100';
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className={cn(
-            'fixed inset-0 z-50 overflow-y-auto',
-            backdropClassName
-          )}
-          variants={backdropVariants}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          transition={{ duration: 0.2 }}
-          onClick={handleBackdropClick}
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center ${className}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-describedby={description ? 'modal-description' : undefined}
+    >
+      {/* Overlay */}
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${
+          prefersReducedMotion ? '' : 'duration-300'
+        } ${backdropClassName}`}
+        onClick={handleBackdropClick}
+      />
+
+      {/* Modal Content */}
+      <div
+        ref={containerRef}
+        className={`relative z-50 w-full max-w-lg rounded-lg bg-white p-6 shadow-xl transition ${transitionClasses} ${getModalClasses()}`}
+        tabIndex={-1}
+      >
+        <h2 id="modal-title" className="text-xl font-semibold">
+          {title}
+        </h2>
+        {description && (
+          <p id="modal-description" className="sr-only">
+            {description}
+          </p>
+        )}
+        <div className="mt-4">{children}</div>
+        <button
+          onClick={onClose}
+          className={`absolute right-4 top-4 rounded p-2 text-gray-500 hover:text-gray-700 focus:outline-none ${
+            focusVisible ? getFocusRingClass() : ''
+          }`}
+          aria-label="Close dialog"
         >
-          {/* Backdrop */}
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-          
-          {/* Modal Container */}
-          <div className={getContainerClasses()}>
-            <motion.div
-              ref={modalRef}
-              className={getModalClasses()}
-              variants={modalVariants[variant]}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={ariaLabelledBy || (title ? 'modal-title' : undefined)}
-              aria-describedby={ariaDescribedBy || (description ? 'modal-description' : undefined)}
-              tabIndex={-1}
-              onKeyDown={handleKeyDown}
-            >
-              {/* Header */}
-              {(title || description || showCloseButton) && (
-                <div className="flex items-start justify-between p-6 border-b border-neutral-200">
-                  <div className="flex-1">
-                    {title && (
-                      <h2
-                        id="modal-title"
-                        className="text-lg font-semibold text-neutral-900"
-                      >
-                        {title}
-                      </h2>
-                    )}
-                    {description && (
-                      <p
-                        id="modal-description"
-                        className="mt-1 text-sm text-neutral-600"
-                      >
-                        {description}
-                      </p>
-                    )}
-                  </div>
-                  
-                  {showCloseButton && (
-                    <button
-                      type="button"
-                      className="ml-4 text-neutral-400 hover:text-neutral-600 transition-colors duration-200"
-                      onClick={onClose}
-                      aria-label="Close modal"
-                    >
-                      <svg
-                        className="h-6 w-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-              )}
-              
-              {/* Content */}
-              <div className="p-6">
-                {children}
-              </div>
-            </motion.div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
   );
 };
 

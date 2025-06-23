@@ -1,264 +1,141 @@
-# Daily Activity Planner - Product Requirements Document
+# Planner Application Database Utility Functions PRD
 
-## Project Overview
+## Overview
+This document outlines the requirements for implementing database utility functions for a planner application using Prisma and PostgreSQL. The functions will provide a clean, type-safe interface for database operations across all models.
 
-### Vision
-Create a modern web service that integrates with Notion databases to provide intelligent visualization and planning for daily activities, featuring a sleek Motion-inspired user interface.
+## Core Requirements
 
-### Core Value Proposition
-- **Seamless Notion Integration**: Automatically sync with existing Notion databases
-- **Intelligent Planning**: AI-powered activity scheduling and optimization
-- **Beautiful Visualization**: Motion-inspired UI with smooth animations and intuitive design
-- **Daily Focus**: Streamlined interface focused on daily activity management
+### Database Setup
+- PostgreSQL 17 database named 'planner_db'
+- Prisma as the ORM layer
+- Type-safe database operations
+- Proper error handling and connection management
 
-## Technical Architecture
+### Data Models
+1. User Model
+   - Basic user information (id, email, name)
+   - Relationships to projects and tasks
+   - Authentication-related fields
 
-### System Components
+2. Project Model
+   - Project metadata (id, name, description)
+   - User relationships (owner, collaborators)
+   - Task organization
 
-1. **Backend API Service**
-   - Node.js/Express server or Next.js API routes
-   - Notion API integration layer
-   - Authentication and session management
-   - Data processing and caching layer
-   - Real-time synchronization service
+3. Task Model
+   - Task details (id, title, description, status)
+   - Project association
+   - User assignments
+   - Due dates and priorities
 
-2. **Frontend Application**
-   - React/Next.js with TypeScript
-   - Motion-inspired UI components
-   - Framer Motion for animations
-   - Responsive design system
-   - Real-time updates via WebSocket/SSE
+4. Comment Model
+   - Comment content
+   - Task association
+   - Author information
+   - Timestamps
 
-3. **Database Layer**
-   - Local caching database (PostgreSQL/SQLite)
-   - Notion database synchronization
-   - User preferences and settings
-   - Activity analytics and history
+5. Attachment Model
+   - File metadata
+   - Task association
+   - Upload information
 
-4. **Integration Services**
-   - Notion API client
-   - Calendar integration (Google Calendar, Outlook)
-   - Time tracking capabilities
-   - Notification system
+### Required Database Operations
 
-## Core Features
+1. User Operations
+   - Create new users
+   - Update user information
+   - Delete users
+   - Find users by various criteria
+   - Manage user relationships with projects
 
-### Phase 1: Foundation
-1. **Notion Database Connection**
-   - OAuth authentication with Notion
-   - Database discovery and selection
-   - Schema mapping and field recognition
-   - Initial data synchronization
+2. Project Operations
+   - Create new projects
+   - Update project details
+   - Delete projects
+   - Find projects by criteria
+   - Manage project memberships
 
-2. **Basic Activity Display**
-   - Clean list view of daily activities
-   - Status indicators (todo, in-progress, completed)
-   - Basic filtering and sorting
-   - Motion-inspired card design
+3. Task Operations
+   - Create tasks
+   - Update task status and details
+   - Delete tasks
+   - Find tasks by various filters
+   - Manage task assignments
 
-3. **Daily Planning Interface**
-   - Today's focus view
-   - Drag-and-drop task organization
-   - Time blocking visualization
-   - Priority-based sorting
+4. Comment Operations
+   - Add comments to tasks
+   - Update comment content
+   - Delete comments
+   - Retrieve comments for tasks
 
-### Phase 2: Enhanced Planning
-1. **Smart Scheduling**
-   - AI-powered time estimation
-   - Automatic scheduling suggestions
-   - Conflict detection and resolution
-   - Buffer time management
+5. Attachment Operations
+   - Add attachments to tasks
+   - Remove attachments
+   - Update attachment metadata
+   - Retrieve attachments
 
-2. **Visual Timeline**
-   - Interactive daily timeline
-   - Time block visualization
-   - Progress tracking
-   - Smooth animations and transitions
+### Technical Requirements
 
-3. **Activity Analytics**
-   - Completion rate tracking
-   - Time spent analysis
-   - Productivity insights
-   - Weekly/monthly summaries
+1. Type Safety
+   - Full TypeScript support
+   - Prisma-generated types
+   - Custom type definitions where needed
+   - Type inference for query results
 
-### Phase 3: Advanced Features
-1. **Calendar Integration**
-   - Two-way sync with external calendars
-   - Meeting and event integration
-   - Availability management
-   - Cross-platform synchronization
+2. Error Handling
+   - Graceful error handling
+   - Meaningful error messages
+   - Transaction support where needed
+   - Connection error recovery
 
-2. **Collaboration Features**
-   - Shared activity views
-   - Team planning capabilities
-   - Assignment and delegation
-   - Progress sharing
+3. Performance
+   - Efficient query patterns
+   - Connection pooling
+   - Proper indexing
+   - Query optimization
 
-3. **Mobile Experience**
-   - Progressive Web App (PWA)
-   - Mobile-optimized interface
-   - Offline capability
-   - Push notifications
+4. Code Organization
+   - Modular function design
+   - Clear separation of concerns
+   - Consistent naming conventions
+   - Comprehensive documentation
 
-## User Experience Design
+## Implementation Guidelines
 
-### Motion-Inspired Design System
-- **Color Palette**: Clean whites, subtle grays, accent colors for status
-- **Typography**: Modern, readable fonts with proper hierarchy
-- **Animations**: Smooth transitions, micro-interactions, loading states
-- **Layout**: Spacious, card-based design with clear visual hierarchy
-- **Interactions**: Intuitive drag-and-drop, hover effects, smooth scrolling
+1. Database Client
+   - Singleton Prisma client instance
+   - Proper connection management
+   - Environment-based configuration
 
-### Key UI Components
-1. **Activity Cards**: Clean, informative cards with status indicators
-2. **Timeline View**: Visual representation of daily schedule
-3. **Quick Actions**: Floating action buttons and context menus
-4. **Status Indicators**: Clear visual feedback for task states
-5. **Navigation**: Minimal, sidebar-based navigation
+2. Utility Functions
+   - Consistent function signatures
+   - Promise-based async operations
+   - Input validation
+   - Result type definitions
 
-## Data Models
+3. Testing Requirements
+   - Unit tests for all functions
+   - Integration tests for workflows
+   - Test database configuration
+   - Mock data generation
 
-### Activity Model
-```json
-{
-  "id": "string",
-  "notionId": "string",
-  "title": "string",
-  "description": "string",
-  "status": "todo|in-progress|completed|cancelled",
-  "priority": "low|medium|high|urgent",
-  "estimatedDuration": "number (minutes)",
-  "actualDuration": "number (minutes)",
-  "scheduledStart": "ISO-8601 timestamp",
-  "scheduledEnd": "ISO-8601 timestamp",
-  "tags": ["string"],
-  "category": "string",
-  "createdAt": "ISO-8601 timestamp",
-  "updatedAt": "ISO-8601 timestamp",
-  "completedAt": "ISO-8601 timestamp",
-  "notionProperties": "object"
-}
-```
+4. Documentation
+   - Function documentation
+   - Usage examples
+   - Type definitions
+   - Error handling guidelines
 
-### User Model
-```json
-{
-  "id": "string",
-  "email": "string",
-  "name": "string",
-  "notionAccessToken": "string (encrypted)",
-  "selectedDatabases": ["string"],
-  "preferences": {
-    "workingHours": {
-      "start": "HH:mm",
-      "end": "HH:mm"
-    },
-    "timeZone": "string",
-    "defaultDuration": "number (minutes)",
-    "bufferTime": "number (minutes)"
-  },
-  "createdAt": "ISO-8601 timestamp",
-  "lastSync": "ISO-8601 timestamp"
-}
-```
+## Success Criteria
+1. All database operations are type-safe
+2. Functions handle errors gracefully
+3. Operations follow Prisma best practices
+4. Code passes all TypeScript checks
+5. Tests cover core functionality
+6. Documentation is complete and accurate
 
-## Technical Requirements
-
-### Frontend Stack
-- **Framework**: Next.js 14+ with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + Framer Motion
-- **State Management**: Zustand or React Query
-- **UI Components**: Headless UI or Radix UI
-- **Icons**: Lucide React or Heroicons
-
-### Backend Stack
-- **Runtime**: Node.js 18+
-- **Framework**: Next.js API routes or Express.js
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js or Auth0
-- **Caching**: Redis (optional)
-- **File Storage**: Local or AWS S3
-
-### External APIs
-- **Notion API**: For database integration
-- **Google Calendar API**: For calendar sync
-- **Microsoft Graph API**: For Outlook integration
-
-## Development Roadmap
-
-### Sprint 1 (Weeks 1-2): Project Setup & Notion Integration
-1. Project initialization and development environment
-2. Notion API integration and authentication
-3. Basic database schema and models
-4. Simple activity fetching and display
-
-### Sprint 2 (Weeks 3-4): Core UI & Daily View
-1. Motion-inspired design system implementation
-2. Activity card components
-3. Daily planning interface
-4. Basic CRUD operations
-
-### Sprint 3 (Weeks 5-6): Enhanced Planning Features
-1. Drag-and-drop functionality
-2. Time blocking interface
-3. Smart scheduling algorithms
-4. Real-time synchronization
-
-### Sprint 4 (Weeks 7-8): Analytics & Polish
-1. Activity analytics and insights
-2. Performance optimization
-3. Error handling and edge cases
-4. User testing and feedback integration
-
-## Success Metrics
-
-### User Engagement
-- Daily active users
-- Session duration
-- Feature adoption rates
-- User retention (7-day, 30-day)
-
-### Functionality
-- Notion sync reliability (>99% uptime)
-- Data accuracy and consistency
-- Response time (<2s for most operations)
-- Mobile responsiveness score
-
-### Business Goals
-- User satisfaction score (>4.5/5)
-- Notion database integration success rate
-- Feature completion rate
-- Performance benchmarks
-
-## Risk Mitigation
-
-### Technical Risks
-- **Notion API Rate Limits**: Implement intelligent caching and batch operations
-- **Data Synchronization**: Build robust conflict resolution and retry mechanisms
-- **Performance**: Optimize queries and implement proper caching strategies
-
-### User Experience Risks
-- **Complexity**: Keep interface simple and intuitive, conduct user testing
-- **Motion Sickness**: Provide reduced motion options and accessibility features
-- **Learning Curve**: Include onboarding flow and helpful tooltips
-
-### Business Risks
-- **Notion API Changes**: Monitor API updates and maintain backward compatibility
-- **Competition**: Focus on unique value proposition and user experience
-- **Scalability**: Design for growth from the beginning
-
-## Future Enhancements
-
-### Advanced Features
-- AI-powered activity suggestions
-- Natural language task creation
-- Integration with other productivity tools
-- Team collaboration features
-- Advanced analytics and reporting
-
-### Platform Expansion
-- Native mobile applications
-- Desktop application (Electron)
-- Browser extensions
-- API for third-party integrations
+## Future Considerations
+1. Caching layer integration
+2. Soft delete implementation
+3. Audit logging
+4. Schema versioning
+5. Performance monitoring

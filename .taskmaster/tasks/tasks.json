@@ -74,8 +74,47 @@
         "dependencies": [
           13
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Install and Configure PostgreSQL Database",
+            "description": "Set up PostgreSQL database for the project and configure connection settings.",
+            "dependencies": [],
+            "details": "1. Install PostgreSQL on the development machine\n2. Create a new database for the project\n3. Set up user credentials with appropriate permissions\n4. Configure database connection settings in the project's .env file\n5. Test the database connection\n\nAcceptance Criteria:\n- PostgreSQL is installed and running\n- Project database is created\n- Database user with correct permissions exists\n- .env file contains correct database connection string\n- Connection to the database can be established programmatically\n<info added on 2025-06-17T00:47:20.078Z>\nPostgreSQL Setup Requirements:\n\n1. Install PostgreSQL:\n   - Download and install PostgreSQL from https://www.postgresql.org/download/\n   - Recommended version: Latest stable (currently 16.x)\n   - During installation:\n     * Remember the password you set for the postgres user\n     * Keep default port: 5432\n     * Install all offered components\n\n2. Create Database:\n   - After installation, create a new database named 'planner_db'\n   - Can be done via pgAdmin or command line:\n     ```sql\n     CREATE DATABASE planner_db;\n     ```\n\n3. Environment Variables:\n   Create a .env file in the project root with:\n   ```\n   # Database\n   DATABASE_URL=\"postgresql://postgres:your-password@localhost:5432/planner_db\"\n   \n   # NextAuth.js\n   NEXTAUTH_URL=\"http://localhost:3000\"\n   NEXTAUTH_SECRET=\"generate-a-secure-secret-here\"\n   \n   # Notion (placeholder)\n   NOTION_CLIENT_ID=\"\"\n   NOTION_CLIENT_SECRET=\"\"\n   ```\n   Replace 'your-password' with your actual PostgreSQL password.\n   Generate a secure NEXTAUTH_SECRET using `openssl rand -base64 32`\n\n4. Verify Connection:\n   - After setting up, run:\n     ```bash\n     npx prisma db push\n     ```\n   - This will create the tables defined in schema.prisma\n</info added on 2025-06-17T00:47:20.078Z>",
+            "status": "done"
+          },
+          {
+            "id": 2,
+            "title": "Define Prisma Schema for All Models",
+            "description": "Create the Prisma schema file with all required models, relationships, and fields.",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create a new schema.prisma file in the project\n2. Define all models (User, Project, Task, Comment, Attachment) with their respective fields\n3. Set up relationships between models (e.g., User-Project, Project-Task)\n4. Add appropriate field types, constraints, and default values\n5. Include necessary Prisma configurations (datasource, generator)\n\nAcceptance Criteria:\n- schema.prisma file exists and is syntactically correct\n- All models (User, Project, Task, Comment, Attachment) are defined\n- Fields for each model match the project requirements\n- Relationships between models are correctly established\n- Prisma configurations are properly set",
+            "status": "done"
+          },
+          {
+            "id": 3,
+            "title": "Generate Prisma Migration and Client",
+            "description": "Create and apply database migrations, and generate the Prisma client for database operations.",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Generate initial Prisma migration\n2. Apply the migration to create database tables\n3. Generate Prisma client\n4. Verify database schema matches Prisma schema\n5. Create a script to easily run migrations in different environments\n\nAcceptance Criteria:\n- Initial migration file is created\n- Database tables are created and match the Prisma schema\n- Prisma client is generated without errors\n- Migration can be run using a custom script\n- Database schema can be verified to match Prisma schema",
+            "status": "done"
+          },
+          {
+            "id": 4,
+            "title": "Implement Database Utility Functions",
+            "description": "Create utility functions for common database operations using the Prisma client.",
+            "dependencies": [
+              3
+            ],
+            "details": "1. Create a database utility file\n2. Implement functions for CRUD operations on each model\n3. Add functions for common queries (e.g., get user projects, get project tasks)\n4. Implement error handling and logging for database operations\n5. Write unit tests for utility functions\n\nAcceptance Criteria:\n- Database utility file exists with exported functions\n- CRUD functions are implemented for each model\n- Common query functions are available and working\n- Error handling is in place for database operations\n- Unit tests cover all implemented utility functions\n- All tests pass successfully",
+            "status": "done"
+          }
+        ]
       },
       {
         "id": 15,
@@ -88,8 +127,66 @@
           13,
           14
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "NextAuth.js Setup and Configuration",
+            "description": "Set up and configure NextAuth.js for authentication in the application",
+            "dependencies": [],
+            "details": "1. Install NextAuth.js and required dependencies\n2. Create API route for NextAuth.js (/api/auth/[...nextauth].js)\n3. Configure authentication providers (Google, GitHub, and email/password)\n4. Set up environment variables for auth providers\n5. Configure callbacks for session and JWT handling\n6. Test basic authentication flow\n\nAcceptance Criteria:\n- NextAuth.js is properly installed and configured\n- Authentication providers are properly set up\n- API routes for authentication are working\n- Environment variables are properly configured\n- Basic authentication flow works end-to-end",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Login and Signup Page Implementation",
+            "description": "Create user interface components for login and signup functionality",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Design and implement login page with email/password and social login options\n2. Create signup page with form validation\n3. Implement password reset functionality\n4. Add error handling and user feedback\n5. Style components according to design system\n6. Ensure responsive design for mobile and desktop\n\nAcceptance Criteria:\n- Login page works with all configured providers\n- Signup form includes proper validation\n- Password reset flow is functional\n- Error messages are clear and helpful\n- UI is consistent with design system\n- Pages are responsive and accessible",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Session Management and Protected Routes",
+            "description": "Implement session management and route protection for authenticated users",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "1. Create session provider wrapper for the application\n2. Implement useSession hook usage throughout the app\n3. Create middleware for protected routes\n4. Add loading states for authentication checks\n5. Implement redirect logic for authenticated/unauthenticated users\n6. Test session persistence and expiration\n\nAcceptance Criteria:\n- Session state is properly maintained throughout the app\n- Protected routes redirect unauthenticated users to login\n- Public routes redirect authenticated users appropriately\n- Loading states are shown during authentication checks\n- Session expiration is handled gracefully\n- Middleware correctly protects designated routes",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Notion Token Secure Storage",
+            "description": "Implement secure storage and management of Notion API tokens",
+            "dependencies": [
+              1,
+              3
+            ],
+            "details": "1. Design database schema for storing encrypted Notion tokens\n2. Implement encryption/decryption utilities for token storage\n3. Create API endpoints for token management (add, update, revoke)\n4. Implement token validation and refresh mechanisms\n5. Add error handling for token-related operations\n6. Create admin interface for token management\n\nAcceptance Criteria:\n- Notion tokens are stored securely (encrypted)\n- Users can connect and disconnect their Notion account\n- Token validation occurs before Notion API calls\n- Expired tokens are handled appropriately\n- Error handling provides clear feedback on token issues\n- Admin can manage and revoke tokens if needed",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "User Profile Management",
+            "description": "Implement user profile management functionality",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "1. Create user profile page with editable fields\n2. Implement profile picture upload and management\n3. Add account settings (email preferences, notifications)\n4. Create account deletion functionality\n5. Implement email verification flow\n6. Add user preferences storage and retrieval\n\nAcceptance Criteria:\n- Users can view and edit their profile information\n- Profile pictures can be uploaded and changed\n- Account settings are saved and applied correctly\n- Account deletion works and handles data properly\n- Email verification flow works end-to-end\n- User preferences are correctly stored and retrieved",
+            "status": "done",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 16,
@@ -102,8 +199,62 @@
           14,
           15
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Notion API Setup and Client Configuration",
+            "description": "Set up the Notion API integration and configure the client for authentication and requests.",
+            "dependencies": [],
+            "details": "1. Create a Notion integration in the Notion developer portal\n2. Obtain API key and client credentials\n3. Install Notion SDK for the project\n4. Create API client wrapper class\n5. Implement basic request/response handling\n6. Test connection with a simple API call\n\nAcceptance Criteria:\n- Successful API connection established\n- Client configuration stored securely\n- Basic API calls working correctly",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "OAuth Flow Implementation",
+            "description": "Implement the OAuth authentication flow to allow users to connect their Notion workspaces.",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create OAuth endpoints in the application\n2. Implement authorization request flow\n3. Handle OAuth callback and token exchange\n4. Store and manage access tokens securely\n5. Implement token refresh mechanism\n6. Add user interface for Notion connection\n\nAcceptance Criteria:\n- Users can authorize the application to access their Notion workspace\n- Access tokens are securely stored and managed\n- Token refresh works automatically\n- Clear error handling for authorization failures",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Database Discovery and Selection",
+            "description": "Implement functionality to discover available Notion databases and allow users to select which ones to integrate.",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Create API methods to list available databases\n2. Implement UI for browsing and selecting databases\n3. Store user database selections\n4. Add pagination for large workspaces\n5. Implement search/filter functionality\n6. Add database metadata preview\n\nAcceptance Criteria:\n- All accessible databases are listed correctly\n- Users can select databases for integration\n- Selection state is persisted\n- UI provides clear feedback on selection process",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Schema Mapping Between Notion and App Models",
+            "description": "Create a mapping system between Notion database schemas and application data models.",
+            "dependencies": [
+              3
+            ],
+            "details": "1. Analyze Notion property types and limitations\n2. Create schema detection for Notion databases\n3. Implement mapping configuration UI\n4. Build mapping persistence layer\n5. Create data transformation utilities\n6. Implement validation for mappings\n\nAcceptance Criteria:\n- All Notion property types supported\n- Bidirectional mapping between systems\n- User-friendly mapping configuration\n- Validation prevents invalid mappings",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Data Synchronization Implementation",
+            "description": "Implement the core data synchronization between Notion databases and the application.",
+            "dependencies": [
+              4
+            ],
+            "details": "1. Create initial data import functionality\n2. Implement change detection mechanism\n3. Build bidirectional sync engine\n4. Add conflict resolution strategies\n5. Implement sync scheduling and triggers\n6. Create sync history and logging\n\nAcceptance Criteria:\n- Data syncs correctly in both directions\n- Conflicts are detected and resolved appropriately\n- Sync operations are atomic and transactional\n- Performance is optimized for large datasets\n- Users can view sync history and status\n<info added on 2025-06-23T01:52:46.765Z>\n# Implementation Progress\n\n## Completed Features\n1. Bidirectional Sync:\n   - Added change detection between Notion and local database\n   - Implemented bidirectional sync with proper error handling\n   - Added support for creating, updating, and deleting items in both directions\n\n2. Conflict Resolution:\n   - Created conflict detection system\n   - Implemented multiple resolution strategies (notion, local, latest, manual)\n   - Added support for applying resolutions to both systems\n\n3. Sync Scheduling:\n   - Added scheduling system with configurable intervals\n   - Implemented background sync operations\n   - Added automatic schedule recovery on system restart\n\n4. Database Schema:\n   - Updated NotionSync model with scheduling fields\n   - Added support for detailed sync results and logging\n   - Created proper indexes for performance\n\n## Technical Implementation\n- src/services/notionSync.ts: Enhanced sync service with bidirectional support\n- src/lib/notion/sync.ts: Added conflict resolution system\n- src/lib/notion/scheduler.ts: Created sync scheduling system\n- prisma/schema.prisma: Updated schema with new sync features\n\n## Next Steps\n1. Add UI components for manual conflict resolution\n2. Implement sync history visualization\n3. Add sync status notifications\n</info added on 2025-06-23T01:52:46.765Z>\n<info added on 2025-06-23T01:56:52.198Z>\n# UI Implementation Progress\n\n## Completed UI Components\n1. ConflictResolver Component:\n   - Implemented manual conflict resolution interface\n   - Added support for multiple resolution strategies (notion, local, latest, manual)\n   - Created visual comparison view showing local and Notion values side-by-side\n   - Implemented error handling and validation for resolution actions\n\n2. SyncHistory Component:\n   - Built detailed sync history visualization with filterable entries\n   - Added status indicators and timestamps for each sync operation\n   - Implemented expandable result details with full sync information\n   - Created error tracking and display for failed sync operations\n\n3. Supporting UI Components:\n   - Developed radio group component for conflict resolution options\n   - Created scroll area component for efficient history list rendering\n   - Built label component for form inputs with proper accessibility\n\n## Technical Implementation\n- src/components/notion/ConflictResolver.tsx: Manual conflict resolution UI\n- src/components/notion/SyncHistory.tsx: History visualization component\n- src/components/ui/RadioGroup.tsx: Custom radio group for resolution options\n- src/components/ui/ScrollArea.tsx: Virtualized scroll area for history lists\n- src/components/ui/Label.tsx: Accessible form label component\n\n## Next Steps\n1. Integrate these components into the main settings page\n2. Add sync status notifications\n3. Test the complete sync workflow\n</info added on 2025-06-23T01:56:52.198Z>",
+            "status": "in-progress",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 17,
@@ -116,7 +267,52 @@
           13
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Tailwind Configuration and Typography",
+            "description": "Set up the foundational styling system using Tailwind CSS with custom configuration for colors, typography, and spacing.",
+            "dependencies": [],
+            "details": "1. Create custom color palette with primary, secondary, accent, and neutral colors including light/dark mode variants\n2. Configure typography system with font families, weights, and a responsive type scale\n3. Set up spacing and sizing scales that maintain consistent rhythm\n4. Create utility classes for common text styles (headings, body, captions)\n5. Implement CSS variables for theme switching capability\n\nAcceptance Criteria:\n- Complete Tailwind config file with all custom values\n- Color system supports both light and dark modes\n- Typography system includes at least 3 font weights and 6 size variants\n- Documentation of color and typography tokens\n<info added on 2025-06-22T22:52:16.841Z>\nThe Tailwind configuration has been reviewed and meets all requirements with the following components:\n\n1. Color System:\n   - Primary/secondary colors with full shade range (50-950)\n   - Activity status colors (pending, in-progress, completed, etc.)\n   - Priority level colors (low, medium, high, urgent)\n   - Semantic colors (success, warning, error, info)\n   - Neutral colors for grays\n   - CSS variables for theme switching (light/dark)\n\n2. Typography System:\n   - Font families:\n     - Sans: Inter (body text)\n     - Display: Poppins (headings)\n     - Mono: JetBrains Mono (code)\n   - Font sizes with appropriate line heights (xs to 6xl)\n   - Font weights (thin to black)\n   - Responsive typography for headings\n   - Text balance utilities\n\n3. Spacing and Layout:\n   - Comprehensive spacing scale (0 to 96)\n   - Border radius system\n   - Container variants (narrow, wide)\n   - Grid utilities (auto-fit, auto-fill)\n   - Safe area utilities\n\n4. Component Base Styles:\n   - Button variants\n   - Input styles\n   - Card components\n   - Status indicators\n   - Timeline components\n   - Loading states\n</info added on 2025-06-22T22:52:16.841Z>",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Core UI Components and Layout System",
+            "description": "Develop the essential UI components and layout primitives that form the foundation of the design system.",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create atomic components: Button (primary, secondary, text variants), Input fields, Checkbox, Radio, Toggle\n2. Develop compound components: Card, Modal, Dropdown, Tabs, Navigation bar\n3. Implement responsive layout components: Container, Grid, Stack, Columns\n4. Build form components with validation states\n5. Ensure consistent styling across all components using Tailwind classes\n\nAcceptance Criteria:\n- All components use the Tailwind configuration from subtask 1\n- Components are responsive across mobile, tablet, and desktop breakpoints\n- Interactive components have proper hover, focus, and active states\n- Components support both light and dark mode\n- Each component has props for common variations\n<info added on 2025-06-22T22:53:39.753Z>\nComponents to Create:\n\n1. Form Components:\n   - Input (text, number, email, password)\n   - Textarea\n   - Select and MultiSelect\n   - Checkbox and Radio\n   - Switch/Toggle\n   - Form Group and Form Label\n   - Form Error and Help Text\n   - Form Validation\n\n2. Navigation Components:\n   - Tabs\n   - Breadcrumbs\n   - Pagination\n   - Menu/Dropdown\n   - Navigation Menu\n\n3. Feedback Components:\n   - Toast/Notification\n   - Alert\n   - Progress Bar\n   - Badge\n   - Tooltip\n\n4. Data Display:\n   - Table\n   - List\n   - Timeline\n   - Avatar\n   - Tag/Chip\n\n5. Overlay Components:\n   - Popover\n   - Dialog\n   - Drawer\n   - Menu\n\nAll components will follow these principles:\n- Motion-inspired animations using Framer Motion\n- Consistent styling with Tailwind CSS\n- Full accessibility support (ARIA, keyboard navigation)\n- Dark mode compatibility\n- Responsive design\n- TypeScript type safety\n- Comprehensive prop interfaces\n- Reusable animation variants\n</info added on 2025-06-22T22:53:39.753Z>\n<info added on 2025-06-22T22:57:25.368Z>\nCompleted Form Components:\n\n1. Input Component:\n   - Size variants (sm, md, lg)\n   - Style variants (default, filled, outline, ghost)\n   - Error states and messages\n   - Help text\n   - Icon support (left and right)\n   - Loading state\n   - Motion animations\n\n2. Textarea Component:\n   - Size variants (sm, md, lg)\n   - Style variants (default, filled, outline, ghost)\n   - Auto-resize functionality\n   - Max height control\n   - Error states and messages\n   - Help text\n   - Motion animations\n\n3. Select Component:\n   - Single and multiple selection\n   - Size variants (sm, md, lg)\n   - Style variants (default, filled, outline, ghost)\n   - Custom dropdown icon\n   - Placeholder support\n   - Error states and messages\n   - Help text\n   - Motion animations\n\n4. Checkbox Component:\n   - Size variants (sm, md, lg)\n   - Indeterminate state\n   - Custom animated checkmark\n   - Label and description\n   - Error states and messages\n   - Help text\n   - Motion animations\n\n5. Switch Component:\n   - Size variants (sm, md, lg)\n   - Smooth thumb animation\n   - Label and description\n   - Error states and messages\n   - Help text\n   - Motion animations\n\n6. Form Group and Label:\n   - FormGroup for organizing form elements\n   - FormLabel with required indicator\n   - Description support\n   - Error states and messages\n   - Help text\n   - Motion animations\n\n7. Animation Utilities:\n   - Reusable Framer Motion variants\n   - Form field animations\n   - Modal and drawer animations\n   - List and list item animations\n   - Tooltip animations\n   - Spring and ease transitions\n\nAll components feature full TypeScript type safety, comprehensive prop interfaces, Framer Motion animations, Tailwind CSS styling, dark mode support, accessibility (ARIA attributes, keyboard navigation), error handling, loading states, and consistent design language.\n</info added on 2025-06-22T22:57:25.368Z>",
+            "status": "in-progress",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Animation System with Framer Motion",
+            "description": "Implement a comprehensive animation system using Framer Motion to create fluid, meaningful transitions and interactions.",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Create page transition animations (fade, slide, scale)\n2. Develop component entrance/exit animations for modals, drawers, and notifications\n3. Implement micro-interactions for buttons, form elements, and interactive components\n4. Build loading and progress indicators with animated states\n5. Create reusable animation hooks and utilities for consistent motion patterns\n6. Implement staggered animations for lists and grids\n\nAcceptance Criteria:\n- Animations feel natural and enhance UX without causing distractions\n- Animation timing and easing are consistent across the system\n- Reusable hooks make implementing animations simple for developers\n- Animations work correctly in different component states\n- Performance is optimized to prevent jank or frame drops",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Accessibility and Documentation",
+            "description": "Ensure the design system meets accessibility standards and create comprehensive documentation for developers.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "1. Implement reduced motion options for users with motion sensitivity\n2. Audit and fix all components for WCAG 2.1 AA compliance\n3. Ensure proper keyboard navigation and focus management\n4. Create comprehensive documentation for all components including:\n   - Usage examples with code snippets\n   - Props and customization options\n   - Accessibility considerations\n5. Build a showcase page demonstrating all components and animations\n6. Add theme customization guidelines\n\nAcceptance Criteria:\n- All components pass accessibility audits (contrast, keyboard navigation, screen reader support)\n- Reduced motion alternatives are available for all animations\n- Documentation is clear, comprehensive and includes live examples\n- Showcase page demonstrates the full design system capabilities\n- Installation and setup instructions are provided",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 18,
@@ -215,11 +411,285 @@
         ],
         "status": "pending",
         "subtasks": []
+      },
+      {
+        "id": 25,
+        "title": "Accessibility and Documentation for Motion-Inspired Design System",
+        "description": "Implement comprehensive accessibility features and documentation for the Motion-Inspired Design System, including ARIA attributes, keyboard navigation, screen reader support, and detailed component documentation.",
+        "details": "1. Accessibility Audit and Improvements:\n   - Review all components for ARIA compliance:\n     - Add appropriate aria-* attributes to interactive elements\n     - Ensure proper role attributes on custom components\n     - Implement aria-live regions for dynamic content\n   - Implement keyboard navigation:\n     - Add focus management for all interactive components\n     - Ensure logical tab order throughout the application\n     - Implement keyboard shortcuts for common actions\n     - Support arrow key navigation within complex components\n   - Screen reader compatibility:\n     - Test with NVDA, JAWS, and VoiceOver\n     - Add descriptive alt text for all images\n     - Ensure form inputs have associated labels\n     - Provide context for icons and visual elements\n   - Focus management:\n     - Create visible focus indicators that meet WCAG 2.1 standards\n     - Implement focus trapping for modals and dialogs\n     - Restore focus when components are closed\n   - Navigation improvements:\n     - Add skip links to bypass repetitive navigation\n     - Implement landmark regions (header, main, footer, etc.)\n     - Create a consistent navigation pattern\n\n2. Documentation Development:\n   - Component API documentation:\n     - Create detailed props tables for each component\n     - Document event handlers and callbacks\n     - Include TypeScript interfaces and type definitions\n     - Provide code examples for common use cases\n   - Accessibility guidelines:\n     - Document WCAG compliance level for each component\n     - Provide accessibility best practices\n     - Include screen reader testing results\n     - Document keyboard shortcuts and navigation\n   - Animation best practices:\n     - Document recommended animation durations\n     - Provide guidance on respecting reduced motion preferences\n     - Include examples of appropriate animation use cases\n     - Document performance considerations\n   - Theme customization guide:\n     - Document theming API and configuration options\n     - Provide examples of custom themes\n     - Include color contrast requirements\n     - Document responsive design considerations\n   - Getting started guide:\n     - Create installation and setup instructions\n     - Document integration with Next.js\n     - Include basic usage examples\n     - Provide troubleshooting guidance\n   - Example patterns:\n     - Create a pattern library with common UI patterns\n     - Document best practices for component composition\n     - Include responsive layout examples\n     - Provide accessibility considerations for each pattern\n   - Performance optimization:\n     - Document component bundle sizes\n     - Provide code splitting recommendations\n     - Include server-side rendering guidance\n     - Document performance benchmarks\n\n3. Testing and Validation:\n   - Implement automated accessibility tests:\n     - Set up jest-axe for component testing\n     - Configure Lighthouse CI for page-level testing\n     - Implement GitHub Actions workflow for accessibility checks\n     - Create custom test helpers for complex interactions\n   - Manual testing procedures:\n     - Develop screen reader testing scripts\n     - Create keyboard navigation test cases\n     - Document browser compatibility testing\n   - Color contrast validation:\n     - Test all color combinations against WCAG AA standards\n     - Validate text legibility across different backgrounds\n     - Document color ratio requirements\n   - Motion sensitivity considerations:\n     - Implement and test prefers-reduced-motion media query\n     - Create alternative non-animated experiences\n     - Document motion intensity levels for animations",
+        "testStrategy": "1. Automated Accessibility Testing:\n   - Run jest-axe on all components to detect WCAG violations\n   - Configure and run Lighthouse CI to test overall accessibility score\n   - Implement pa11y for automated page testing\n   - Verify all tests pass with zero accessibility violations\n\n2. Manual Accessibility Testing:\n   - Test keyboard navigation through all components:\n     - Verify tab order is logical and complete\n     - Confirm all interactive elements can be activated with keyboard\n     - Test arrow key navigation within complex components\n     - Verify escape key closes modals and dialogs\n   - Screen reader testing:\n     - Test with NVDA on Windows\n     - Test with JAWS on Windows\n     - Test with VoiceOver on macOS\n     - Test with TalkBack on Android\n     - Verify all content is properly announced\n     - Check that dynamic content updates are announced appropriately\n\n3. Documentation Validation:\n   - Review all documentation for completeness:\n     - Verify all components have API documentation\n     - Confirm all props and methods are documented\n     - Check that examples are working and up-to-date\n   - Peer review of documentation:\n     - Have team members review for clarity and accuracy\n     - Test code examples to ensure they work as documented\n     - Verify documentation is accessible and properly formatted\n\n4. Visual and Interaction Testing:\n   - Test focus indicators for visibility against all background colors\n   - Verify color contrast meets WCAG AA standards using contrast checker tools\n   - Test animations with prefers-reduced-motion enabled\n   - Verify skip links function correctly\n\n5. Cross-browser and Device Testing:\n   - Test accessibility features across Chrome, Firefox, Safari, and Edge\n   - Verify mobile accessibility on iOS and Android devices\n   - Test with different screen sizes and zoom levels\n   - Verify touch interactions are accessible\n\n6. User Testing:\n   - Conduct testing sessions with users who rely on assistive technology\n   - Gather feedback on documentation clarity and completeness\n   - Address issues identified during user testing\n\n7. Compliance Verification:\n   - Complete WCAG 2.1 AA compliance checklist\n   - Document any known issues with remediation plans\n   - Create accessibility statement documenting compliance level",
+        "status": "pending",
+        "dependencies": [
+          16,
+          19,
+          22,
+          24
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Conduct initial accessibility audit of existing components",
+            "description": "Perform a comprehensive audit of all existing components in the Motion-Inspired Design System to identify accessibility issues and gaps.",
+            "dependencies": [],
+            "details": "Use automated tools like axe-core and manual testing to evaluate components against WCAG 2.1 AA standards. Document all findings in a structured report highlighting critical issues, moderate concerns, and minor improvements needed. Categorize issues by component and type (keyboard, screen reader, ARIA, etc.).",
+            "status": "pending",
+            "testStrategy": "Run automated tests with axe-core and manually test key components with screen readers (NVDA, JAWS, VoiceOver) and keyboard-only navigation."
+          },
+          {
+            "id": 2,
+            "title": "Implement ARIA attributes for interactive components",
+            "description": "Add appropriate ARIA attributes to all interactive elements in the design system to improve screen reader compatibility.",
+            "dependencies": [
+              1
+            ],
+            "details": "For each component, identify required ARIA roles, states, and properties. Implement aria-* attributes such as aria-label, aria-labelledby, aria-describedby, aria-expanded, aria-controls, etc. Ensure custom components have appropriate role attributes. Document all ARIA implementations in component code.",
+            "status": "pending",
+            "testStrategy": "Test each component with screen readers to verify ARIA attributes are correctly announced. Create unit tests to verify ARIA attributes are properly applied."
+          },
+          {
+            "id": 3,
+            "title": "Develop keyboard navigation system",
+            "description": "Implement comprehensive keyboard navigation support for all interactive components in the design system.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure all interactive elements are focusable and have logical tab order. Implement arrow key navigation for complex components like tabs, dropdowns, and carousels. Add keyboard shortcuts for common actions and document them. Create a consistent keyboard interaction pattern across all components.",
+            "status": "pending",
+            "testStrategy": "Create keyboard navigation test scripts and manually verify tab order, focus management, and keyboard shortcuts for each component."
+          },
+          {
+            "id": 4,
+            "title": "Create focus management system",
+            "description": "Develop a robust focus management system for the design system, including visible focus indicators and focus trapping for modals.",
+            "dependencies": [
+              3
+            ],
+            "details": "Design and implement visible focus indicators that meet WCAG 2.1 standards. Create a focus trap utility for modals and dialogs. Implement focus restoration when components are closed. Ensure focus indicators are visible in all color themes and contrast modes.",
+            "status": "pending",
+            "testStrategy": "Test focus visibility against WCAG 2.1 standards. Verify focus trapping in modals works with keyboard and screen readers. Create automated tests for focus management behaviors."
+          },
+          {
+            "id": 5,
+            "title": "Implement screen reader compatibility improvements",
+            "description": "Enhance all components to work seamlessly with popular screen readers, focusing on meaningful announcements and proper context.",
+            "dependencies": [
+              2
+            ],
+            "details": "Add descriptive alt text for all images. Ensure form inputs have properly associated labels. Provide context for icons and visual elements. Implement aria-live regions for dynamic content. Test and refine announcements with NVDA, JAWS, and VoiceOver.",
+            "status": "pending",
+            "testStrategy": "Create a test matrix covering all components with NVDA, JAWS, and VoiceOver. Document expected announcements and verify actual behavior."
+          },
+          {
+            "id": 6,
+            "title": "Develop navigation accessibility features",
+            "description": "Implement accessible navigation patterns including skip links, landmark regions, and consistent navigation structures.",
+            "dependencies": [
+              3
+            ],
+            "details": "Add skip links to bypass repetitive navigation. Implement proper landmark regions (header, main, nav, footer, etc.). Create a consistent navigation pattern across the application. Ensure all navigation elements are properly labeled for screen readers.",
+            "status": "pending",
+            "testStrategy": "Test navigation with keyboard-only and screen reader users. Verify landmark regions are properly announced and skip links function correctly."
+          },
+          {
+            "id": 7,
+            "title": "Implement reduced motion support",
+            "description": "Create alternative non-animated experiences for users who prefer reduced motion.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement and test the prefers-reduced-motion media query across all animated components. Create alternative non-animated or subtly animated experiences for users with motion sensitivity. Document motion intensity levels for all animations in the system.",
+            "status": "pending",
+            "testStrategy": "Test all components with prefers-reduced-motion enabled. Verify animations are appropriately reduced or eliminated. Create automated tests to verify reduced motion behavior."
+          },
+          {
+            "id": 8,
+            "title": "Set up automated accessibility testing",
+            "description": "Implement automated accessibility testing infrastructure to catch issues early in the development process.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up jest-axe for component-level testing. Configure Lighthouse CI for page-level accessibility testing. Implement GitHub Actions workflow for automated accessibility checks on PRs. Create custom test helpers for testing complex interactions.",
+            "status": "pending",
+            "testStrategy": "Verify automated tests catch known accessibility issues. Document false positives and create appropriate exceptions where necessary."
+          },
+          {
+            "id": 9,
+            "title": "Create component API documentation",
+            "description": "Develop comprehensive API documentation for all components in the design system.",
+            "dependencies": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Create detailed props tables for each component, including prop names, types, default values, and descriptions. Document event handlers and callbacks. Include TypeScript interfaces and type definitions. Provide code examples for common use cases and variations.",
+            "status": "pending",
+            "testStrategy": "Review documentation for completeness and accuracy. Test code examples to ensure they work as documented."
+          },
+          {
+            "id": 10,
+            "title": "Develop accessibility guidelines documentation",
+            "description": "Create comprehensive accessibility guidelines for using the design system components.",
+            "dependencies": [
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "details": "Document WCAG compliance level for each component. Provide accessibility best practices for component implementation and composition. Include screen reader testing results and known limitations. Document keyboard shortcuts and navigation patterns.",
+            "status": "pending",
+            "testStrategy": "Review guidelines with accessibility experts. Verify all documented practices actually work as described with assistive technologies."
+          },
+          {
+            "id": 11,
+            "title": "Create animation and motion documentation",
+            "description": "Document animation best practices, durations, and motion sensitivity considerations.",
+            "dependencies": [
+              7
+            ],
+            "details": "Document recommended animation durations and easing functions. Provide guidance on respecting reduced motion preferences. Include examples of appropriate animation use cases. Document performance considerations for animations. Create visual examples of animation principles.",
+            "status": "pending",
+            "testStrategy": "Review documentation with motion designers and developers. Test examples across different devices to ensure performance guidance is accurate."
+          },
+          {
+            "id": 12,
+            "title": "Develop theme customization guide",
+            "description": "Create documentation for theme customization, including accessibility considerations for custom themes.",
+            "dependencies": [
+              9
+            ],
+            "details": "Document theming API and configuration options. Provide examples of custom themes with code samples. Include color contrast requirements and testing procedures. Document responsive design considerations for theming. Create a theme accessibility checklist.",
+            "status": "pending",
+            "testStrategy": "Test custom theme examples to verify they maintain accessibility standards. Create contrast testing tools or procedures for theme developers."
+          },
+          {
+            "id": 13,
+            "title": "Create getting started and integration guide",
+            "description": "Develop comprehensive onboarding documentation for new developers using the design system.",
+            "dependencies": [
+              9
+            ],
+            "details": "Create installation and setup instructions for different frameworks. Document integration with Next.js specifically. Include basic usage examples that demonstrate key concepts. Provide troubleshooting guidance for common issues. Create a quickstart template repository.",
+            "status": "pending",
+            "testStrategy": "Have developers unfamiliar with the system follow the guide and provide feedback. Test installation instructions in clean environments."
+          },
+          {
+            "id": 14,
+            "title": "Develop pattern library and composition examples",
+            "description": "Create a pattern library showcasing common UI patterns and component compositions.",
+            "dependencies": [
+              9,
+              10,
+              11,
+              12
+            ],
+            "details": "Create a pattern library with common UI patterns using the design system components. Document best practices for component composition. Include responsive layout examples. Provide accessibility considerations for each pattern. Create interactive examples where possible.",
+            "status": "pending",
+            "testStrategy": "Test patterns across different viewport sizes. Verify all patterns meet accessibility standards. Get feedback from design and development teams."
+          },
+          {
+            "id": 15,
+            "title": "Document performance optimization strategies",
+            "description": "Create comprehensive performance documentation for the design system.",
+            "dependencies": [
+              13
+            ],
+            "details": "Document component bundle sizes and loading strategies. Provide code splitting recommendations for different use cases. Include server-side rendering guidance specific to the design system. Document performance benchmarks and testing methodologies. Create performance budgets and monitoring recommendations.",
+            "status": "pending",
+            "testStrategy": "Verify bundle size information with actual builds. Test performance recommendations in real applications. Create performance regression testing procedures."
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "title": "Task Reminder System Implementation",
+        "description": "Implement a comprehensive task reminder system with database model, scheduling service, push notification integration, UI components, and integration with the existing task system.",
+        "details": "1. Create Reminder Database Model:\n   - Define Prisma schema for reminders with fields:\n     ```prisma\n     model Reminder {\n       id          String   @id @default(cuid())\n       taskId      String\n       userId      String\n       reminderTime DateTime\n       reminderType String   // \"push\", \"email\", etc.\n       message     String?\n       isRead      Boolean  @default(false)\n       createdAt   DateTime @default(now())\n       updatedAt   DateTime @updatedAt\n       task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)\n       user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n     }\n     ```\n   - Add relations to User and Task models\n   - Create migration and apply to database\n\n2. Implement Reminder Scheduling Service:\n   - Create a background service using Node.js worker threads or a dedicated service\n   - Implement scheduling logic to check for upcoming reminders\n   - Use a job queue system (like Bull or node-schedule) for reliable scheduling\n   - Handle timezone differences and daylight saving time\n   - Implement retry mechanisms for failed notifications\n\n3. Integrate Push Notifications:\n   - Leverage the PWA infrastructure from Task 24\n   - Implement Web Push API integration\n   - Create notification templates for different reminder types\n   - Handle permission requests and user preferences\n   - Implement notification actions (snooze, mark as complete)\n\n4. Build UI Components for Reminder Management:\n   - Create ReminderForm component for setting new reminders\n   - Implement ReminderList component to view upcoming and past reminders\n   - Add reminder editing and deletion functionality\n   - Build notification center UI for viewing all notifications\n   - Create preference settings for notification types and timing\n\n5. Integrate with Existing Task System:\n   - Add reminder functionality to ActivityCard component\n   - Update task creation/editing forms to include reminder options\n   - Implement reminder suggestions based on task priority and due dates\n   - Ensure reminders update when tasks are modified\n   - Handle reminder cleanup when tasks are completed or deleted",
+        "testStrategy": "1. Database Model Testing:\n   - Verify Prisma schema generates correct database tables\n   - Test CRUD operations for reminder objects\n   - Validate relationships between reminders, tasks, and users\n   - Test cascade deletion behavior\n\n2. Scheduling Service Testing:\n   - Create unit tests for scheduling logic with mocked time\n   - Test edge cases like timezone changes and daylight saving transitions\n   - Verify job queue correctly processes scheduled reminders\n   - Test retry mechanisms and error handling\n   - Perform load testing with many simultaneous reminders\n\n3. Push Notification Testing:\n   - Test notification delivery on different browsers and devices\n   - Verify notification content and formatting\n   - Test user interaction with notifications (clicks, dismissals)\n   - Validate offline behavior and delivery after reconnection\n   - Test permission handling and preference respect\n\n4. UI Component Testing:\n   - Create unit tests for all reminder components\n   - Test form validation for reminder creation\n   - Verify reminder list displays correct information\n   - Test editing and deletion functionality\n   - Validate accessibility of all reminder UI components\n\n5. Integration Testing:\n   - End-to-end tests for complete reminder workflow\n   - Verify reminders trigger at correct times\n   - Test integration with task completion and modification\n   - Validate synchronization with Notion (if applicable)\n   - Test performance impact on the overall application",
+        "status": "pending",
+        "dependencies": [
+          14,
+          15,
+          18,
+          24
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Reminder Database Model and Migrations",
+            "description": "Define the Prisma schema for reminders and update related models with appropriate relations. Create and apply database migrations.",
+            "dependencies": [],
+            "details": "1. Add the Reminder model to the Prisma schema with all required fields (id, taskId, userId, reminderTime, reminderType, message, isRead, createdAt, updatedAt).\n2. Add @relation fields to connect with Task and User models.\n3. Update the Task and User models to include the relation to Reminder.\n4. Generate the migration files using 'npx prisma migrate dev'.\n5. Apply migrations to the development database.\n6. Update the Prisma client by running 'npx prisma generate'.",
+            "status": "done",
+            "testStrategy": "Verify the database schema by creating test records and confirming relations work correctly. Write unit tests for the Prisma client queries related to reminders."
+          },
+          {
+            "id": 2,
+            "title": "Create Reminder API Endpoints",
+            "description": "Implement the necessary API endpoints for creating, retrieving, updating, and deleting reminders.",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create a new reminders.ts file in the API routes directory.\n2. Implement POST /api/reminders endpoint for creating new reminders.\n3. Implement GET /api/reminders endpoint to fetch user's reminders with filtering options.\n4. Implement GET /api/reminders/:id endpoint to fetch a specific reminder.\n5. Implement PUT /api/reminders/:id endpoint to update a reminder.\n6. Implement DELETE /api/reminders/:id endpoint to delete a reminder.\n7. Add proper authentication middleware to ensure users can only access their own reminders.",
+            "status": "done",
+            "testStrategy": "Write API tests using Jest and Supertest to verify each endpoint functions correctly with various input scenarios including error cases."
+          },
+          {
+            "id": 3,
+            "title": "Implement Reminder Scheduling Service",
+            "description": "Create a background service to schedule and trigger reminders at the appropriate times.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "1. Set up Bull queue for reliable job scheduling.\n2. Create a worker process that runs independently from the main application.\n3. Implement a scheduler that periodically checks for upcoming reminders.\n4. Add logic to handle timezone differences using the date-fns or similar library.\n5. Implement retry mechanisms for failed notification attempts.\n6. Create functions to add reminders to the queue when they're created or updated.\n7. Set up proper error logging and monitoring for the background service.",
+            "status": "done",
+            "testStrategy": "Create unit tests with mocked time to verify scheduling logic. Test the retry mechanism by simulating failures. Implement integration tests to verify end-to-end reminder scheduling."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Push Notification System",
+            "description": "Connect the reminder system with push notifications to deliver alerts to users.",
+            "dependencies": [
+              3
+            ],
+            "details": "1. Leverage the existing PWA infrastructure from Task 24.\n2. Implement Web Push API integration using web-push library.\n3. Create notification templates for different reminder types.\n4. Add handlers for notification permission requests.\n5. Implement notification actions (snooze, mark as complete).\n6. Create a notification service that can be called by the reminder scheduler.\n7. Store user subscription information in the database.",
+            "status": "pending",
+            "testStrategy": "Test notification delivery with different browsers. Create mocks for the Web Push API to test the notification service. Verify notification actions work correctly."
+          },
+          {
+            "id": 5,
+            "title": "Build UI Components for Reminder Management",
+            "description": "Create the frontend components needed for users to create, view, and manage reminders.",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Create a ReminderForm component for setting new reminders with date/time picker.\n2. Implement a ReminderList component to display upcoming and past reminders.\n3. Add UI for editing and deleting existing reminders.\n4. Build a notification center component to view all notifications.\n5. Create user preference settings for notification types and timing.\n6. Implement client-side validation for reminder forms.\n7. Add responsive design for mobile compatibility.",
+            "status": "pending",
+            "testStrategy": "Write React component tests using React Testing Library. Test form validation logic. Verify components render correctly with different data inputs."
+          },
+          {
+            "id": 6,
+            "title": "Integrate Reminders with Existing Task System",
+            "description": "Connect the reminder functionality with the existing task management system.",
+            "dependencies": [
+              4,
+              5
+            ],
+            "details": "1. Update the ActivityCard component to display associated reminders.\n2. Modify task creation and editing forms to include reminder options.\n3. Implement reminder suggestions based on task priority and due dates.\n4. Add logic to update or delete reminders when tasks are modified or completed.\n5. Create a unified notification experience that includes task reminders.\n6. Update the task detail view to show all associated reminders.\n7. Ensure all UI components are consistent with the existing design system.",
+            "status": "pending",
+            "testStrategy": "Create integration tests to verify reminders are properly connected to tasks. Test the suggestion algorithm with various task scenarios. Verify UI updates correctly when task or reminder data changes."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-06-15T22:54:53.388Z",
-      "updated": "2025-06-17T00:41:31.196Z",
+      "updated": "2025-06-23T02:05:28.999Z",
       "description": "Tasks for master context"
     }
   }
