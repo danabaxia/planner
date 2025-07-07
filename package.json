@@ -21,7 +21,7 @@
     "@emotion/styled": "^11.14.0",
     "@headlessui/react": "^2.2.0",
     "@hookform/resolvers": "^5.1.1",
-    "@notionhq/client": "^2.3.0",
+    "@notionhq/client": "^4.0.0",
     "@prisma/client": "^6.10.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
